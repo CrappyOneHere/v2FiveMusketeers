@@ -18,7 +18,14 @@
     "jest": "^28.1.0"
   },
   "jest": {
-    "verbose": true
-  },
-  "type": "module"
+    "verbose": true, 
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    } 
+  }
 }
