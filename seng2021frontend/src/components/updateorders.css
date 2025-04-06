@@ -1,0 +1,26 @@
+#update-title {
+    color: #f13a4c;
+    text-align: center;
+}
+
+#quantity input, #address textarea, #confirm, #products {
+    color: black;
+    display: flex;
+    gap: 10px;
+}
+
+#total-cost, #confirm {
+    color: white;
+}
+
+.column2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 34%;
+    gap: 30px;
+}
+
+#products {
+    margin-left: -168px;
+}
