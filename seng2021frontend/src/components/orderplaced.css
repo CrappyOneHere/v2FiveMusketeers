@@ -1,0 +1,18 @@
+#orders-placed-title {
+    color: #f13a4c;
+    text-align: center;
+    margin-left: 20%;
+}
+.column2 {
+    color: white;
+}
+u {
+    color: #f13a4c;
+}
+.rows {
+    display: flex;
+    gap: 110px;
+}
+.table {
+    width: 500px;
+}
