@@ -45,6 +45,8 @@ describe('getSellerOrders Lambda Function', () => {
     expect(response.body).toContain('Missing sellerId');
   });
 
+  
+
   it('returns 500 on unexpected DynamoDB error', async () => {
     ddbMock.on(ScanCommand).rejects(new Error('DynamoDB is down'));
 
