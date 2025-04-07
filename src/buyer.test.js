@@ -1,257 +1,171 @@
-import * as buyerController from '../controllers/buyerController.js';
-import pool from '../db.js';
 import {
-  login,
-  createOrder,
-  updateOrder,
-  deleteOrder,
-  signout
-} from '../controllers/buyerController.js';
-
-const OK = 200;
-const CREATED = 201;
-const INPUT_ERROR = 400;
-const INTERNAL_SERVER_ERROR = 500;
-
-//======================BUYER UNIT TEST========================//
-
-jest.mock('../db.js', () => ({
-  query: jest.fn()
-}));
-
-jest.mock('../controllers/buyerController', () => ({
-  ...jest.requireActual('../controllers/buyerController'),
-  validEmail: jest.fn(),
-  existingEmail: jest.fn(),
-  validAddress: jest.fn(),
-  existingOrderId: jest.fn(),
-  existingProduct: jest.fn(),
-  validQuantity: jest.fn(),
-  validOrdersList: jest.fn()
-}));
-
-describe('POST /buyer/login', () => {
-  describe('Success cases', () => {
-    test('Successfully logs in a new user', async () => {
-      pool.query.mockResolvedValueOnce({ rows: [] });
-      buyerController.validEmail.mockReturnValue(true);
-      buyerController.existingEmail.mockResolvedValue(false);
-
-      const result = await login('newuser1@example.com');
-
-      expect(result.code).toBe(OK);
-      expect(result.message).toBe('Welcome new user!');
+    login,
+    signout,
+    createOrder,
+    deleteOrder,
+  } from './buyer.js';
+  
+  import {
+    DynamoDBClient,
+    ScanCommand,
+    PutItemCommand,
+    UpdateItemCommand,
+    GetItemCommand,
+    DeleteItemCommand,
+  } from '@aws-sdk/client-dynamodb';
+  
+  import { mockClient } from 'aws-sdk-client-mock';
+  import { marshall } from '@aws-sdk/util-dynamodb';
+  
+  const dynamoMock = mockClient(DynamoDBClient);
+  
+  beforeEach(() => {
+    dynamoMock.reset();
+  });
+  
+  describe('login function', () => {
+    test('should welcome back an existing user', async () => {
+      dynamoMock.on(ScanCommand).resolves({
+        Items: [{ email: { S: 'test@example.com' } }]
+      });
+  
+      const result = await login({ email: 'test@example.com' });
+  
+      expect(result.statusCode).toBe(200);
+      expect(result.body).toContain('Welcome Back');
     });
-
-    test('Successfully logs in an existing user', async () => {
-      pool.query.mockResolvedValueOnce({ rows: [{ id: 1 }] });
-      buyerController.validEmail.mockReturnValue(true);
-      buyerController.existingEmail.mockResolvedValue(true);
-
-      const result = await login('existinguser1@example.com');
-
-      expect(result.code).toBe(OK);
-      expect(result.message).toBe('Welcome back!');
+  
+    test('should register new user if email not found', async () => {
+      dynamoMock.on(ScanCommand).resolves({ Items: [] });
+      dynamoMock.on(PutItemCommand).resolves({});
+  
+      const result = await login({ email: 'new@example.com' });
+  
+      expect(result.statusCode).toBe(201);
+      expect(result.body).toContain('User added successfully');
+    });
+  
+    test('should return 400 for invalid email', async () => {
+      const result = await login({ email: '' });
+  
+      expect(result.statusCode).toBe(400);
+    });
+  
+    test('should return 500 for DB error', async () => {
+      dynamoMock.on(ScanCommand).rejects(new Error('DB fail'));
+  
+      const result = await login({ email: 'fail@example.com' });
+  
+      expect(result.statusCode).toBe(500);
     });
   });
-
-  describe('Error cases', () => {
-    test('Invalid email address', async () => {
-      buyerController.validEmail.mockReturnValue(false);
-
-      const result = await buyerController.login(null);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Email is required.');
+  
+  describe('signout function', () => {
+    test('should logout successfully', async () => {
+      dynamoMock.on(GetItemCommand).resolves({
+        Item: marshall({ email: 'user@example.com' })
+      });
+      dynamoMock.on(UpdateItemCommand).resolves({});
+  
+      const result = await signout({ email: 'user@example.com' });
+  
+      expect(result.statusCode).toBe(200);
+      expect(result.body).toContain('Logout Successful');
     });
-
-    test('Internal Server Error', async () => {
-      buyerController.validEmail.mockReturnValue(true);
-      buyerController.existingEmail.mockRejectedValue(new Error('DB crash'));
-
-      const result = await buyerController.login('user@example.com');
-
-      expect(result.code).toBe(INTERNAL_SERVER_ERROR);
-      expect(result.message).toBe('Internal server error');
+  
+    test('should return 404 if user not found', async () => {
+      dynamoMock.on(GetItemCommand).resolves({});
+  
+      const result = await signout({ email: 'nouser@example.com' });
+  
+      expect(result.statusCode).toBe(404);
     });
-  });
-});
-
-describe('PUT /buyer/signout', () => {
-  describe('Success cases', () => {
-    test('Successfully signs out the user', async () => {
-      buyerController.validEmail.mockReturnValue(true);
-      buyerController.existingEmail.mockResolvedValue(true);
-      pool.query.mockResolvedValueOnce({ rowCount: 1 });
-
-      const result = await signout('user@example.com');
-
-      expect(result.code).toBe(OK);
-      expect(result.message).toBe('Logged out successfully.');
+  
+    test('should return 400 for invalid email', async () => {
+      const result = await signout({ email: '' });
+  
+      expect(result.statusCode).toBe(400);
     });
-  });
-
-  describe('Error cases', () => {
-    test('Invalid email address', async () => {
-      buyerController.validEmail.mockReturnValue(false);
-
-      const result = await buyerController.signout(null);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Email is required.');
-    });
-
-    test('Internal Server Error', async () => {
-      buyerController.validEmail.mockReturnValue(true);
-      buyerController.existingEmail.mockResolvedValue(true);
-      pool.query.mockRejectedValue(new Error('DB crash'));
-
-      const result = await signout('user@example.com');
-
-      expect(result.code).toBe(INTERNAL_SERVER_ERROR);
-      expect(result.message).toBe('Internal server error');
+  
+    test('should return 500 on DB error', async () => {
+      dynamoMock.on(GetItemCommand).rejects(new Error('boom'));
+  
+      const result = await signout({ email: 'fail@example.com' });
+  
+      expect(result.statusCode).toBe(500);
     });
   });
-});
-
-describe('POST /buyer/createOrder', () => {
-  describe('Success cases', () => {
-    test('Successfully creates order', async () => {
-      buyerController.existingEmail.mockResolvedValue(true);
-      buyerController.validAddress.mockReturnValue(true);
-      buyerController.validOrdersList.mockReturnValue(true);
-      pool.query.mockResolvedValueOnce({ rows: [{ id: 101 }] });
-      pool.query.mockResolvedValue({});
-
-      const result = await createOrder('buyer@example.com', [{ productId: 1, productCost: 5, productQuantity: 2 }], '123 Street');
-
-      expect(result.code).toBe(CREATED);
-      expect(result.message).toMatch(/Order created successfully/);
+  
+  describe('createOrder function', () => {
+    test('should return 400 for invalid email', async () => {
+      const result = await createOrder({ email: '', orderList: [], deliveryAddress: '' }, { awsRequestId: 'abc' });
+      expect(result.statusCode).toBe(400);
+    });
+  
+    test('should return 400 if buyer not found', async () => {
+      dynamoMock.on(GetItemCommand).resolves({});
+  
+      const result = await createOrder({
+        email: 'unknown@example.com',
+        orderList: [{ productId: '123', quantity: 1 }],
+        deliveryAddress: '123 Street'
+      }, { awsRequestId: 'xyz' });
+  
+      expect(result.statusCode).toBe(400);
+    });
+  
+    test('should create order successfully', async () => {
+      const productItem = marshall({
+        id: '123',
+        stockRemaining: 10,
+        cost: 5
+      });
+  
+      dynamoMock
+        .on(GetItemCommand)
+        .resolvesOnce({ Item: marshall({ email: 'test@example.com' }) }) // Check user
+        .resolvesOnce({ Item: productItem }) // Check product
+        .resolvesOnce({ Item: productItem }); // Cost lookup
+      dynamoMock.on(PutItemCommand).resolves({});
+      dynamoMock.on(UpdateItemCommand).resolves({});
+  
+      const result = await createOrder({
+        email: 'test@example.com',
+        orderList: [{ productId: '123', quantity: 1 }],
+        deliveryAddress: '456 Ave'
+      }, { awsRequestId: 'req123' });
+  
+      expect(result.statusCode).toBe(201);
+      expect(result.body).toContain('Order created successfully');
     });
   });
-
-  describe('Error cases', () => {
-    test('Invalid delivery address', async () => {
-      buyerController.existingEmail.mockResolvedValue(true);
-      buyerController.validAddress.mockReturnValue(false);
-
-      const result = await createOrder('buyer@example.com', [], null);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Invalid delivery address');
+  
+  describe('deleteOrder function', () => {
+    test('should delete order successfully', async () => {
+      dynamoMock.on(DeleteItemCommand).resolves({});
+      dynamoMock.on(GetItemCommand).resolves({
+        Item: marshall({ email: 'user@example.com', orders: ['order1'] })
+      });
+      dynamoMock.on(UpdateItemCommand).resolves({});
+  
+      const result = await deleteOrder({ email: 'user@example.com', orderId: 'order1' });
+  
+      expect(result.statusCode).toBe(200);
+      expect(result.body).toContain('Order deleted');
     });
-
-    test('Internal Server Error', async () => {
-      buyerController.existingEmail.mockResolvedValue(true);
-      buyerController.validAddress.mockReturnValue(true);
-      buyerController.validOrdersList.mockReturnValue(true);
-      pool.query.mockRejectedValue(new Error('DB error'));
-
-      const result = await createOrder('buyer@example.com', [{ productId: 1 }], '123 Street');
-
-      expect(result.code).toBe(INTERNAL_SERVER_ERROR);
-      expect(result.message).toBe('Error creating order, please try again later.');
+  
+    test('should return 400 for missing fields', async () => {
+      const result = await deleteOrder({ email: '', orderId: '' });
+  
+      expect(result.statusCode).toBe(400);
     });
-  });
-});
-
-describe('PUT /buyer/updateOrder/{orderId}', () => {
-  describe('Success cases', () => {
-    test('Successfully updates order', async () => {
-      buyerController.existingOrderId.mockResolvedValue(true);
-      buyerController.validOrdersList.mockReturnValue(true);
-      pool.query.mockResolvedValue({ rowCount: 1 });
-
-      const result = await updateOrder([{ productId: 1, productCost: 5, productQuantity: 3 }], 1001);
-
-      expect(result.code).toBe(CREATED);
-      expect(result.message).toBe('Order updated successfully');
-    });
-
-    test('Can update order multiple times', async () => {
-      buyerController.existingOrderId.mockResolvedValue(true);
-      buyerController.validOrdersList.mockReturnValue(true);
-      pool.query.mockResolvedValue({ rowCount: 1 });
-
-      const result = await updateOrder([{ productId: 2, productCost: 4, productQuantity: 2 }], 1001);
-
-      expect(result.code).toBe(CREATED);
+  
+    test('should return 500 on DB error', async () => {
+      dynamoMock.on(DeleteItemCommand).rejects(new Error('fail'));
+  
+      const result = await deleteOrder({ email: 'x', orderId: 'y' });
+  
+      expect(result.statusCode).toBe(500);
     });
   });
-
-  describe('Error cases', () => {
-    test('Invalid orderId', async () => {
-      buyerController.existingOrderId.mockResolvedValue(false);
-
-      const result = await updateOrder([], null);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Invalid order id');
-    });
-
-    test('Invalid product Id', async () => {
-      buyerController.existingProduct.mockReturnValue(false);
-
-      const result = await buyerController.deleteOrder({ orderId: 1002 });
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Invalid product Id');
-    });
-
-    test('Invalid product quantity', async () => {
-      buyerController.validQuantity.mockReturnValue(false);
-
-      const result = await updateOrder([{ productId: 1, productQuantity: -10 }], 1001);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Invalid quantity');
-    });
-
-    test('Internal Server Error', async () => {
-      buyerController.existingOrderId.mockResolvedValue(true);
-      buyerController.validOrdersList.mockReturnValue(true);
-      pool.query.mockRejectedValue(new Error('DB fail'));
-
-      const result = await updateOrder([{ productId: 1, productCost: 5, productQuantity: 3 }], 1001);
-
-      expect(result.code).toBe(INTERNAL_SERVER_ERROR);
-      expect(result.message).toBe('Error updating order, please try again later.');
-    });
-  });
-});
-
-describe('DELETE /buyer/deleteOrder/{orderId}', () => {
-  describe('Success cases', () => {
-    test('Successfully deletes order', async () => {
-      buyerController.existingOrderId.mockResolvedValue(true);
-      pool.query.mockResolvedValue({ rowCount: 1 });
-
-      const result = await deleteOrder(1001);
-
-      expect(result.code).toBe(CREATED);
-      expect(result.message).toBe('Order deleted successfully');
-    });
-  });
-
-  describe('Error cases', () => {
-    test('Invalid orderId', async () => {
-      buyerController.existingOrderId.mockResolvedValue(false);
-
-      const result = await deleteOrder(null);
-
-      expect(result.code).toBe(INPUT_ERROR);
-      expect(result.message).toBe('Invalid order id');
-    });
-
-    test('Internal Server Error', async () => {
-      buyerController.existingOrderId.mockResolvedValue(true);
-      pool.query.mockRejectedValue(new Error('DB error'));
-
-      const result = await deleteOrder(1001);
-
-      expect(result.code).toBe(INTERNAL_SERVER_ERROR);
-      expect(result.message).toBe('Error deleting order, please try again later.');
-    });
-  });
-});
- 
+  
