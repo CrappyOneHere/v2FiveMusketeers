@@ -32,7 +32,7 @@ function Vieworders () {
                     <p>Ordered / updated on: 12/03/2025</p>
 
                     <div id="update-delete-btns">
-                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>View</button>
+                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>Update</button>
                     <button type="button" class="btn btn-danger" onClick={(event) => orderDeletion(event.target.closest('.order').classList[1])}>Delete</button>
                     </div>
                 </div>)}
@@ -42,7 +42,7 @@ function Vieworders () {
                     <p>Ordered / updated on: 02/03/2025</p>
 
                     <div id="update-delete-btns">
-                        <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>View</button>
+                        <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>Update</button>
                         <button type="button" class="btn btn-danger"  onClick={(event) => orderDeletion(event.target.closest('.order').classList[1])}>Delete</button>
                     </div>
                 </div>)}
@@ -52,7 +52,7 @@ function Vieworders () {
                     <p>Ordered / updated on: 15/03/2025</p>
 
                     <div id="update-delete-btns">
-                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>View</button>
+                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>Update</button>
                     <button type="button" class="btn btn-danger"  onClick={(event) => orderDeletion(event.target.closest('.order').classList[1])}>Delete</button>
                     </div>
                 </div>)}
@@ -62,7 +62,7 @@ function Vieworders () {
                     <p>Ordered / updated on: 18/03/2025</p>
 
                     <div id="update-delete-btns">
-                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>View</button>
+                    <button type="button" class="btn btn-primary" onClick={() => nav('/updateOrders')}>Update</button>
                     <button type="button" class="btn btn-danger delete-btn"  onClick={(event) => orderDeletion(event.target.closest('.order').classList[1])}>Delete</button>
                     </div>
                 </div>)}
