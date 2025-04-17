@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  background-color: #242424;
+}
+img {
+  width: 30px;
+  height: 30px;
+}
+
+.link-hover:hover {
+  text-decoration: underline;
+}
+
+.flex-ratio {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.push-to-center {
+  margin-left: 60vw;
+}
+
+.cards-div {
+  margin-left: 400px;
+}
+.v-center {
+  margin-top: 50vh;
+}
+.v-end {
+  margin-top: 70vh;
+}
+
+.number-input {
+  width: 63px;
+  padding: 5px;
+  height: 35px;
+  border-radius: 2rem;
+  background-color: white;
+  color: black
+}
+
+.card-btn {
+  margin-left: 75%;
+}
+
+.order-cards .view-order {
+  margin-left: 190px;
+  margin-top: 10px;
+  margin-bottom:0;
+}
+.order-cards .view-order:hover {
+  text-decoration: underline;
+}
+textarea {
+  background-color: #242424;
+}
