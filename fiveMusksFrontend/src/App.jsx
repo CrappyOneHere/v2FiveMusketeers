@@ -7,6 +7,7 @@ import CreateOrder from './components/CreateOrder';
 import ViewOrders from './components/ViewOrders';
 import ViewOrderDetails from './components/ViewOrderDetails';
 import UpdateOrder from './components/UpdateOrder';
+import Checkout from './components/Checkout';
 import './App.css'
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
             <Route path="/updateOrder/:orderId" element={<UpdateOrder setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/viewOrders" element={<ViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/viewOrders/:id" element={<ViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/checkoutOrder/:orderId" element={<Checkout setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+
           </Routes>
         </BrowserRouter>
     </>
