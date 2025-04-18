@@ -17,7 +17,10 @@ function ViewOrders(props) {
             )
             setOrderInfo(response.data)
         } catch (err) {
-           alert(`Error: ${err.response.data}`)
+            // if (err.response.data === "No orders found for buyer") {
+            //     console.log("No orders found for buyer")
+            // }
+        //    alert(`Error: ${err.response.data}`)
         }
     }
 

@@ -43,13 +43,23 @@ img {
   margin-left: 75%;
 }
 
-.order-cards .view-order {
+.order-cards .view-order{
   margin-left: 190px;
   margin-top: 10px;
   margin-bottom:0;
+  font-weight: 600;
 }
-.order-cards .view-order:hover {
+.order-cards .checkout-text  {
+  margin-left: 162px;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+.order-cards .view-order:hover, .checkout-text:hover {
   text-decoration: underline;
+}
+
+.center-page{
+  margin-left: 43%;
 }
 textarea {
   background-color: #242424;
