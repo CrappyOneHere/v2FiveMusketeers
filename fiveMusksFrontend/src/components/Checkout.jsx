@@ -179,8 +179,12 @@ function Checkout(props) {
                     <Button className="btn-danger" type="submit">Checkout order</Button>
                 </Form>
             </div>
+
             {xmlResponse !== null &&
-            <p className="text-white mx-5 mt-5">{xmlResponse}</p>}
+                <div className="text-black mx-5 mt-3 bg-light p-3 rounded">
+                    <h4 className="text-black my-5 center-page">UBL document:</h4>
+                    {xmlResponse}
+                </div>}
    </>
   );
 }

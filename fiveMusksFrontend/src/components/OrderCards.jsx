@@ -36,6 +36,7 @@ function OrderCards(props) {
                     <Button variant="dark" className='mx-1' onClick={() => nav(`/updateOrder/${props.orderId}`)}>Update</Button>
                     <Button variant="danger" onClick={() => deleteOrderHandler()}>Delete</Button>
                 </div>
+
                 <p className='text-danger checkout-text' onClick={() => nav(`/checkoutOrder/${props.orderId}`)}>{`→ Checkout`}</p>
             </Card.Body>
         </Card>
