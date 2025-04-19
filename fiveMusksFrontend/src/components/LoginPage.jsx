@@ -23,7 +23,13 @@ function LoginPage(props) {
               localStorage.setItem('email', props.email)
               localStorage.setItem('name', props.name)
               localStorage.setItem('userRole', role)
-              nav('/buyerDashboard')
+
+              if (role === "buyer") {
+                nav('/buyerDashboard')
+              } else if (role === "seller") {
+                nav('/sellerDashboard')
+              }
+    
             } else {
               alert(`Error: ${JSON.parse(response.data.body).error}`)
             }
@@ -66,9 +72,7 @@ function LoginPage(props) {
               disabled={props.email === "" || role === ''}
               onClick= {
                 (e) => {e.preventDefault()
-                    if (role === "buyer") {
                         loginFn()
-                    }
               }}>
         Submit
       </Button>
