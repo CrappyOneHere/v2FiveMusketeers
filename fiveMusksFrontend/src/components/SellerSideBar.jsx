@@ -38,8 +38,8 @@ function SellerSideBar(props) {
                     </Offcanvas.Header>
                     <Offcanvas.Body>
                         <ul>
-                            <li> Create order </li>
-                            <li> View orders </li>
+                            <li className="list-group-item mb-4 link-hover" onClick={() => nav('/sellerViewProducts')}>View products</li>
+                            <li className="list-group-item link-hover" onClick={() => nav('/sellerViewOrders')}>View Orders</li>
                         </ul>
                         <Button className="btn-dark v-end" onClick={() => logoutHandler()}>Logout</Button>
                     </Offcanvas.Body>
