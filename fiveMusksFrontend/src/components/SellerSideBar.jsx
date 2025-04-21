@@ -7,7 +7,6 @@ function SellerSideBar(props) {
     const nav = useNavigate()
 
     const logoutHandler = async() => {
-        console.log(props)
         try {
             await axios.put('https://mus5kuz5j9.execute-api.us-east-1.amazonaws.com/v1/logout',
                 {},

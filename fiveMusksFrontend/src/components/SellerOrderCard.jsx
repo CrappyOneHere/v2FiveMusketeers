@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 function SellerOrderCard(props) {
+    const nav = useNavigate();
     return (
         <Card
             style={{
@@ -16,7 +18,7 @@ function SellerOrderCard(props) {
                 <div className="d-flex justify-content-between align-items-start mb-2">
                     <div style={{ maxWidth: '75%' }}>
                         <Card.Title className="mb-1" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                            🧾 Order ID
+                            🧾 Order {props.index} ID
                         </Card.Title>
                         <Card.Text className="text-muted" style={{ fontSize: '0.9rem', wordBreak: 'break-word' }}>
                             {props.orderId}
@@ -26,7 +28,7 @@ function SellerOrderCard(props) {
                         variant="outline-primary"
                         size="sm"
                         className="ms-2 mt-1"
-                        onClick={props.onViewOrder}
+                        onClick={() => nav(`/viewSellerOrders/${props.orderId}`)}
                     >
                         View
                     </Button>
@@ -35,7 +37,10 @@ function SellerOrderCard(props) {
                 <hr className="my-2" />
 
                 <div className="mb-2 text-muted" style={{ fontSize: '0.85rem', wordBreak: 'break-word' }}>
-                    Email: <strong>{props.buyerEmail}</strong>
+                    Email: 
+                    <a href={`mailto:${props.buyerEmail}`} style={{ textDecoration: 'none' }}>
+                        <strong>{props.buyerEmail}</strong>
+                    </a>
                 </div>
 
                 <div className="mb-2 text-muted" style={{ fontSize: '0.85rem' }}>

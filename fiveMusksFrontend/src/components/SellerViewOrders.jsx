@@ -44,6 +44,7 @@ function SellerViewOrders(props) {
                 {orderInfo.map((order, index) => {
                     return (
                         <SellerOrderCard key={index}
+                                         index={index + 1}
                                          orderId={order.id}
                                          buyerEmail={order.email}
                                          dateCreated={order.dateCreated.slice(0, 10)}
