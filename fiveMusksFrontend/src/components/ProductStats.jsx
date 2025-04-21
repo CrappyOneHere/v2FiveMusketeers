@@ -5,14 +5,14 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
 const fakeSalesData = [
-  { date: "Mar 21", sales: 10 },
-  { date: "Mar 25", sales: 15 },
+  { date: "Mar 21", sales: 0 },
+  { date: "Mar 25", sales: 0 },
   { date: "Mar 28", sales: 5 },
   { date: "Apr 1", sales: 20 },
   { date: "Apr 5", sales: 18 },
   { date: "Apr 10", sales: 22 },
-  { date: "Apr 15", sales: 25 },
-  { date: "Apr 20", sales: 30 },
+  { date: "Apr 15", sales: 20 },
+  { date: "Apr 20", sales: 40 },
 ];
 
 const ProductStats = () => {
