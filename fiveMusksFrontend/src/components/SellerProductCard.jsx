@@ -6,6 +6,7 @@ import axios from "axios";
 
 function SellerProductCard(props) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const nav = useNavigate();
 
     const deleteProductHandler = async () => {
         const confirmDelete = window.confirm(`Are you sure you want to delete "${props.title}"?`);
@@ -24,7 +25,7 @@ function SellerProductCard(props) {
                 }
             );
             alert(response.data.message || 'Product deleted successfully');
-            props.refreshProducts(); // Refresh product list
+            props.refreshProducts();
         } catch (err) {
             console.error(err);
             alert("Error deleting product: " + (err.response?.data?.error || err.message));
@@ -42,8 +43,8 @@ function SellerProductCard(props) {
             <Card.Text>{`Quantity: ${props.quantity}`}</Card.Text>
 
             <div className="d-flex justify-content-between mt-3">
-                <Button variant="dark" size="sm" onClick={props.onView}>View</Button>
-                <Button variant="danger" size="sm" disabled={isDeleting} onClick={deleteProductHandler}> {isDeleting ? "Deleting..." : "Delete"}</Button>
+            <Button variant="dark" size="sm" onClick={() => nav(`/productStats/${props.productId}`)}>View</Button>
+            <Button variant="danger" size="sm" disabled={isDeleting} onClick={deleteProductHandler}> {isDeleting ? "Deleting..." : "Delete"}</Button>
             </div>
             </Card.Body>
         </Card>
