@@ -8,6 +8,7 @@ import ViewOrders from './components/ViewOrders';
 import ViewOrderDetails from './components/ViewOrderDetails';
 import UpdateOrder from './components/UpdateOrder';
 import Checkout from './components/Checkout';
+import Dispatch from './components/Dispatch';
 import './App.css'
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <Route path="/viewOrders" element={<ViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/viewOrders/:id" element={<ViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/checkoutOrder/:orderId" element={<Checkout setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/dispatch" element={<Dispatch setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
 
           </Routes>
         </BrowserRouter>

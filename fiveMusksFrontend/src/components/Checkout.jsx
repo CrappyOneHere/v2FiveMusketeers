@@ -2,9 +2,14 @@ import Sidebar from "./Sidebar";
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from "react-router-dom";
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import axios from "axios";
+import MyDocument from "./MyDocument";
+import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import ReactPDF from '@react-pdf/renderer';
+import { PDFViewer } from '@react-pdf/renderer';
 
 import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
@@ -21,7 +26,7 @@ function Checkout(props) {
     const [country, setCountry] = useState('AU');
     const [validated, setValidated] = useState(false);
     const [xmlResponse, setXmlResponse] = useState(null);
-
+    const nav = useNavigate()
     const checkoutOrderApi = async() => {
         try {
             const response = await axios.post(`https://mus5kuz5j9.execute-api.us-east-1.amazonaws.com/v1/buyer/checkout?orderId=${orderId}`, {
@@ -48,6 +53,16 @@ function Checkout(props) {
             console.log("Error:", err)
         }
     }
+    const handleDownloadXml = () => {
+        const blob = new Blob([xmlResponse], { type: 'application/xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'order.xml';
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+
     const handleSubmit = (event) => {
       const form = event.currentTarget;
       if (form.checkValidity() === false) {
@@ -58,24 +73,13 @@ function Checkout(props) {
       checkoutOrderApi()
       event.preventDefault();
     };
-    const memoSidebar = useMemo(() => {
-        return (
-            <Sidebar
-            setUserRole={props.setUserRole}
-            userRole={props.userRole}
-            setEmail={props.setEmail}
-            setName={props.setName}
-            email={props.email} />
-        )}, [props.setUserRole, props.userRole, props.setEmail, props.setName, props.email])
     return (
         <>
-
-            {/* <div className="flex-ratio-col1">
-               {memoSidebar}
-            </div> */}
-
             <div className="flex-wrap align-items-center justify-content-center">
-                <h1 className="text-white mt-3 mb-5 pb-5 center-page">Checkout order</h1>
+                <div className="d-flex justify-content-between checkout-heading">
+                    <h1 className="text-white mt-3 mb-5 pb-5 ms-5" onClick={()=>{nav('/viewOrders')}}>←</h1>
+                    <h1 className="text-white mt-3 mb-5 pb-5 checkout-order-heading">Checkout order</h1>
+                </div>
                 <Form noValidate validated={validated} onSubmit={handleSubmit} className="text-white mx-5">
                     <Row className="mb-3">
                         <Form.Group as={Col} md="4" controlId="validationCustom01">
@@ -86,9 +90,7 @@ function Checkout(props) {
                             placeholder="Unit 5B"
                             onChange={(e) => setAddressLine(e.target.value)}
                             value={addressLine}
-                            // defaultValue=""
                         />
-                        {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="4" controlId="validationCustom02">
                         <Form.Label>Building name:</Form.Label>
@@ -98,9 +100,7 @@ function Checkout(props) {
                             placeholder="Leafy plaza"
                             onChange={(e) => setBuildingName(e.target.value)}
                             value={buildingName}
-                            // defaultValue="Otto"
                         />
-                        {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="6" controlId="validationCustom03">
                         <Form.Label>Building number:</Form.Label>
@@ -181,10 +181,24 @@ function Checkout(props) {
             </div>
 
             {xmlResponse !== null &&
-                <div className="text-black mx-5 mt-3 bg-light p-3 rounded">
-                    <h4 className="text-black my-5 center-page">UBL document:</h4>
-                    {xmlResponse}
-                </div>}
+                <div className="d-flex flex-column text-black mx-5 mt-5 pt-5">
+                    <h3 className="text-white my-3"> XML document:</h3>
+                    <PDFViewer>
+                        <MyDocument content={xmlResponse}/>
+                    </PDFViewer>
+
+                    <div className="d-flex justify-content-center">
+                    <PDFDownloadLink document={<MyDocument content={xmlResponse}/>} fileName="xml.pdf" className="download-text pdf">
+                                            {({ blob, url, loading, error }) =>
+                                                loading ? 'Loading document...' : 'Download PDF'
+                                            }
+                                        </PDFDownloadLink>
+                                        <p variant="success" className="my-3 download-text xml" onClick={handleDownloadXml}>
+                                            Download XML
+                                        </p>
+                    </div>
+                </div>
+            }
    </>
   );
 }
