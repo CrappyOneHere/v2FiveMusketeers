@@ -40,6 +40,7 @@ function Sidebar(props) {
                         <ul>
                             <li className="list-group-item mb-4 link-hover" onClick={() => nav('/createOrder')}>Create order</li>
                             <li className="list-group-item link-hover mb-4" onClick={() => nav('/viewOrders')}>View orders</li>
+                            <li className="list-group-item link-hover mb-4" onClick={() => nav('/invoice')}>Invoice</li>
                             <li className="list-group-item link-hover" onClick={() => nav('/dispatch')}>Dispatch</li>
                         </ul>
                         <Button className="btn-dark v-end" onClick={() => logoutHandler()}>Logout</Button>

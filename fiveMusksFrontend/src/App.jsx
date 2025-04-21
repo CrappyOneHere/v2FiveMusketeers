@@ -14,7 +14,9 @@ import SellerViewOrders from './components/SellerViewOrders';
 import SellerViewOrderDetails from './components/SellerViewOrderDetails';
 import ProductStats from "./components/ProductStats";
 import Dispatch from './components/Dispatch';
+import Invoice from './Invoice';
 import './App.css'
+import InvoiceDetails from './components/InvoiceDetails';
 
 function App() {
   const [email, setEmail] = useState(null)
@@ -55,6 +57,8 @@ function App() {
             <Route path="/viewSellerOrders/:id" element={<SellerViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/productStats/:productId" element={<ProductStats />} />
             <Route path="/dispatch" element={<Dispatch setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/invoiceDetails" element={<InvoiceDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/invoice" element={<Invoice setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
           </Routes>
         </BrowserRouter>
     </>

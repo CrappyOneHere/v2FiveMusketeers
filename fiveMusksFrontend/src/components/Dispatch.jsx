@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 function Dispatch () {
+    const nav = useNavigate()
     return (
         <>
             <div className="d-flex justify-content-between">

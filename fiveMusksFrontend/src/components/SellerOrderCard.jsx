@@ -37,7 +37,7 @@ function SellerOrderCard(props) {
                 <hr className="my-2" />
 
                 <div className="mb-2 text-muted" style={{ fontSize: '0.85rem', wordBreak: 'break-word' }}>
-                    Email: 
+                    Email:
                     <a href={`mailto:${props.buyerEmail}`} style={{ textDecoration: 'none' }}>
                         <strong>{props.buyerEmail}</strong>
                     </a>
