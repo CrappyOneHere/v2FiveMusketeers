@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import SellerSideBar from './SellerSideBar';
 import axios from "axios";
 import { Button, Modal, Form } from 'react-bootstrap';
-import SellerProductOrderedCard from './SellerProductCard';
+import SellerProductCard from './SellerProductCard';
 
 function SellerViewProducts(props) {
     const [productInfo, setProductInfo] = useState([]);
@@ -63,7 +63,6 @@ function SellerViewProducts(props) {
          
         } catch (err) {
             // alert("Failed to add product:", err);
-           
         }
     };
 
@@ -86,7 +85,7 @@ function SellerViewProducts(props) {
                 <div className='cards-div d-flex flex-wrap justify-content-center'>
                     {productInfo.map((product, index) => {
                         return (
-                            <SellerProductOrderedCard title={product.name}
+                            <SellerProductCard title={product.name}
                                                 key={index}
                                                 quantity={product.stockRemaining}
                                                 email={props.email}

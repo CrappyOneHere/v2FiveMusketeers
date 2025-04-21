@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button'; 
 import axios from "axios";
 
-function SellerProductOrderedCard(props) {
+function SellerProductCard(props) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const deleteProductHandler = async () => {
@@ -12,27 +12,24 @@ function SellerProductOrderedCard(props) {
         if (!confirmDelete) return;
       
         try {
-          setIsDeleting(true);
-      
-          const response = await axios.delete(
-            'https://mus5kuz5j9.execute-api.us-east-1.amazonaws.com/v1/seller/deleteProduct',
-            {
-              headers: {
-                email: props.email,
-              },
-              data: {
-                productId: props.productId
-              }
-            }
-          );
-      
-          alert(response.data.message || 'Product deleted successfully');
-          props.refreshProducts(); // Refresh product list
+            setIsDeleting(true);  
+                const response = await axios.delete('https://mus5kuz5j9.execute-api.us-east-1.amazonaws.com/v1/seller/deleteProduct',
+                {
+                    headers: {
+                        email: props.email,
+                    },
+                    data: {
+                        productId: props.productId
+                    }
+                }
+            );
+            alert(response.data.message || 'Product deleted successfully');
+            props.refreshProducts(); // Refresh product list
         } catch (err) {
-          console.error(err);
-          alert("Error deleting product: " + (err.response?.data?.error || err.message));
+            console.error(err);
+            alert("Error deleting product: " + (err.response?.data?.error || err.message));
         } finally {
-          setIsDeleting(false);
+            setIsDeleting(false);
         }
     };
     return (
@@ -52,4 +49,4 @@ function SellerProductOrderedCard(props) {
         </Card>
     );
 }
-export default SellerProductOrderedCard;
+export default SellerProductCard;

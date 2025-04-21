@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import SellerSideBar from './SellerSideBar';
 import axios from "axios";
+import SellerOrderCard from "./SellerOrderCard";
 
 function SellerViewOrders(props) {
     const [orderInfo, setOrderInfo] = useState([])
@@ -36,9 +37,20 @@ function SellerViewOrders(props) {
                     setUserRole={props.setUserRole}
                     userRole={props.userRole}/>
             </div>
+            
             <div>
                 <h1 className="push-to-center text-white mt-3">All orders received</h1>
-                
+                <div className='cards-div d-flex flex-wrap justify-content-center'> 
+                {orderInfo.map((order, index) => {
+                    return (
+                        <SellerOrderCard key={index}
+                                         orderId={order.id}
+                                         buyerEmail={order.email}
+                                         dateCreated={order.dateCreated.slice(0, 10)}
+                                         orderConfirmed={order.orderConfirmation}/>
+                    )
+                })}
+                </div> 
                 </div>
             </div>
         </>
