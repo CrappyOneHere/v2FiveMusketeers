@@ -11,6 +11,7 @@ import UpdateOrder from './components/UpdateOrder';
 import Checkout from './components/Checkout';
 import SellerViewProducts from './components/SellerViewProducts';
 import SellerViewOrders from './components/SellerViewOrders';
+import SellerViewOrderDetails from './components/SellerViewOrderDetails';
 import './App.css'
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             <Route path="/sellerDashboard" element={<SellerDashboard setUserRole={setUserRole} userRole={userRole} dashboardMsg={dashboardMsg} setEmail={setEmail} setName={setName} email={email}/>}></Route>
             <Route path="/sellerViewProducts" element={<SellerViewProducts setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/sellerViewOrders" element={<SellerViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/viewSellerOrders/:id" element={<SellerViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
           </Routes>
         </BrowserRouter>
     </>
