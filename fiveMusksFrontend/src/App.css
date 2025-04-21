@@ -71,10 +71,13 @@ img {
   text-decoration: underline;
 }
 
-.center-page{
+.center-page {
   margin-left: 43%;
 }
 
+.center {
+  margin-left: 450px;
+}
 textarea {
   background-color: #242424;
 }

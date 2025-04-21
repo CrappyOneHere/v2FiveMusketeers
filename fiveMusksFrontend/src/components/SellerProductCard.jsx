@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, {useState} from 'react';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button'; 
+import Button from 'react-bootstrap/Button';
 import axios from "axios";
 
 function SellerProductCard(props) {
@@ -11,9 +11,8 @@ function SellerProductCard(props) {
     const deleteProductHandler = async () => {
         const confirmDelete = window.confirm(`Are you sure you want to delete "${props.title}"?`);
         if (!confirmDelete) return;
-      
         try {
-            setIsDeleting(true);  
+            setIsDeleting(true);
                 const response = await axios.delete('https://mus5kuz5j9.execute-api.us-east-1.amazonaws.com/v1/seller/deleteProduct',
                 {
                     headers: {
