@@ -20,6 +20,15 @@ img {
   margin-left: 60vw;
 }
 
+.push-to-left {
+  margin-left: 30vw;
+}
+
+.push-to-right {
+  margin-left: 85vw;
+}
+
+
 .cards-div {
   margin-left: 400px;
 }

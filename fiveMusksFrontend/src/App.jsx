@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import BuyerDashboard from './components/BuyerDashboard';
+import SellerDashboard from './components/SellerDashboard';
 import "bootstrap/dist/css/bootstrap.min.css";
 import CreateOrder from './components/CreateOrder';
 import ViewOrders from './components/ViewOrders';
 import ViewOrderDetails from './components/ViewOrderDetails';
 import UpdateOrder from './components/UpdateOrder';
 import Checkout from './components/Checkout';
+import SellerViewProducts from './components/SellerViewProducts';
+import SellerViewOrders from './components/SellerViewOrders';
+import SellerViewOrderDetails from './components/SellerViewOrderDetails';
+import ProductStats from "./components/ProductStats";
 import Dispatch from './components/Dispatch';
 import './App.css'
 
@@ -44,8 +49,12 @@ function App() {
             <Route path="/viewOrders" element={<ViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/viewOrders/:id" element={<ViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/checkoutOrder/:orderId" element={<Checkout setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/sellerDashboard" element={<SellerDashboard setUserRole={setUserRole} userRole={userRole} dashboardMsg={dashboardMsg} setEmail={setEmail} setName={setName} email={email}/>}></Route>
+            <Route path="/sellerViewProducts" element={<SellerViewProducts setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/sellerViewOrders" element={<SellerViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/viewSellerOrders/:id" element={<SellerViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
+            <Route path="/productStats/:productId" element={<ProductStats />} />
             <Route path="/dispatch" element={<Dispatch setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
-
           </Routes>
         </BrowserRouter>
     </>
