@@ -13,6 +13,7 @@ import SellerViewProducts from './components/SellerViewProducts';
 import SellerViewOrders from './components/SellerViewOrders';
 import SellerViewOrderDetails from './components/SellerViewOrderDetails';
 import ProductStats from "./components/ProductStats";
+import Dispatch from './components/Dispatch';
 import './App.css'
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="/sellerViewOrders" element={<SellerViewOrders setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/viewSellerOrders/:id" element={<SellerViewOrderDetails setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
             <Route path="/productStats/:productId" element={<ProductStats />} />
+            <Route path="/dispatch" element={<Dispatch setUserRole={setUserRole} userRole={userRole} setEmail={setEmail} setName={setName} email={email}/>}> </Route>
           </Routes>
         </BrowserRouter>
     </>

@@ -79,7 +79,7 @@ function SellerViewProducts(props) {
 
             <div>
                 <h1 className="push-to-center text-white mt-3">All existing products</h1>
-                <button className="push-to-left btn btn-success mt-4 mb-5" onClick={handleShow}>
+                <button className="push-to-right btn btn-success mt-4 mb-5" onClick={handleShow}>
                     + Add Product 
                 </button>
                 <div className='cards-div d-flex flex-wrap justify-content-center'>
