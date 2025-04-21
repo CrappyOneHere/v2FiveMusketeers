@@ -23,9 +23,11 @@ img {
 .cards-div {
   margin-left: 400px;
 }
+
 .v-center {
   margin-top: 50vh;
 }
+
 .v-end {
   margin-top: 70vh;
 }
@@ -49,11 +51,13 @@ img {
   margin-bottom:0;
   font-weight: 600;
 }
+
 .order-cards .checkout-text  {
   margin-left: 162px;
   margin-bottom: 0;
   font-weight: 600;
 }
+
 .order-cards .view-order:hover, .checkout-text:hover {
   text-decoration: underline;
 }
@@ -61,6 +65,45 @@ img {
 .center-page{
   margin-left: 43%;
 }
+
 textarea {
   background-color: #242424;
+}
+
+.checkout-order-heading {
+  margin-right: 30%;
+}
+
+.dispatch-heading  {
+  margin-right: 35%;
+}
+
+.click-here {
+  text-decoration: none;
+  color: white;
+  font-size: x-large;
+  margin-left: 50%;
+  margin-top: 500px;
+}
+
+.click-here:hover {
+  text-decoration: underline;
+}
+
+.download-text {
+  font-size: large;
+  text-decoration: none;
+  color: #dc3545;
+  /* padding: 5px; */
+  /* background-color: white; */
+  margin-top: 20px;
+  width: 200px;
+}
+.download-text:hover {
+  text-decoration: underline;
+}
+
+.download-text.pdf {
+  position: relative;
+  top: -3px;
 }
